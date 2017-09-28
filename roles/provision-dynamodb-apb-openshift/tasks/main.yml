@@ -1,0 +1,32 @@
+- name: Launch dynamodb
+  cloudformation:
+   aws_access_key: "{{ aws_access_key }}"
+   aws_secret_key: "{{ aws_secret_key }}"
+   stack_name: "apb-dynamodb-{{ stack_identifier }}"
+   state: "present"
+   region: "{{ region }}"
+   disable_rollback: false
+   template: "{{ role_path }}/files/DynamoDB.yml"
+   template_parameters:
+     ApplicationName: "{{ ApplicationName }}"
+     HashAttributeName: "{{ HashAttributeName }}"
+     HashAttributeType: "{{ HashAttributeType }}"
+     RangeAttributeName: "{{ RangeAttributeName }}"
+     RangeAttributeType: "{{ RangeAttributeType }}"
+     ReadCapacityUnits: "{{ ReadCapacityUnits }}"
+     WriteCapacityUnits: "{{ WriteCapacityUnits }}"
+   tags:
+     Stack: "ansible-cloudformation"
+     Application: "ansible-dynamodb"
+     Description: "{{ ansible_user_id }} dynamodb {{ ApplicationName }}"
+  register: dynamodb
+
+- name: Check for CloudFormation error logs
+  debug:
+    var: dynamodb.log
+
+- name: Encode bind credentials
+  asb_encode_binding:
+    fields:
+      table_name: "{{ dynamodb.stack_outputs.TableName }}"
+  when: dynamodb.log | length < 1

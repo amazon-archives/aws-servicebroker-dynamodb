@@ -1,0 +1,11 @@
+#############################################################################
+# Deprovision dynamodb table
+#############################################################################
+
+- name: Remove dynamodb table
+  cloudformation:
+    aws_access_key: "{{ aws_access_key }}"
+    aws_secret_key: "{{ aws_secret_key }}"
+    stack_name: "apb-dynamodb-{{ stack_identifier }}"
+    state: "absent"
+    region: "{{ region }}"

@@ -1,0 +1,99 @@
+name: dynamodb-apb
+image: ansibleplaybookbundle/dynamodb-apb
+description: 'dynamodb table'
+tags:
+  - amazon
+  - dynamodb
+bindable: true
+async: optional
+plans:
+  - name: default
+    description: 'dynamodb bucket'
+    free: false
+    parameters:
+      - name: stack_identifier
+        required: true
+        title: Unique Stack Identifier
+        description: 'Unique identifier to be included in the CloudFormation Stack Name to prevent naming collisions. Must only contain alphanumeric characters and hyphens. (e.g. "sample-dynamodb-stack", "production-dynamodb-09-2017")'
+        type: string
+      - name: aws_access_key
+        required: true
+        title: AWS Access Key
+        description: 'AWS Access Key to authenticate to AWS with.'
+        type: string
+      - name: aws_secret_key
+        required: true
+        title: AWS Secret Key
+        description: 'AWS Secret Key to authenticate to AWS with.'
+        type: string
+      - name: region
+        required: true
+        title: AWS Region
+        description: 'AWS Region to create the bucket in.'
+        type: enum
+        enum:
+          - ap-northeast-1
+          - ap-northeast-2
+          - ap-south-1
+          - ap-southeast-1
+          - ap-southeast-2
+          - ca-central-1
+          - eu-central-1
+          - eu-west-1
+          - eu-west-2
+          - sa-east-1
+          - us-east-1
+          - us-east-2
+          - us-west-1
+          - us-west-2
+        default: "us-west-2"
+      - name: ApplicationName
+        required: true
+        title: Application Name
+        description: 'This will be set as the value for the \"APPLICATION_NAME\" tag on all supported resources'
+        type: string
+      - name: HashAttributeName
+        required: true
+        title: Hash Attribute Name
+        description: 'The attribute name that is used as the primary key for this table. Primary key element names can be 1 – 255 characters long and have no character restrictions.'
+        type: string
+      - name: HashAttributeType
+        required: true
+        title: Hash Attribute Type
+        description: 'The data type for the attribute. You can specify S for string data, N for numeric data, or B for binary data.'
+        enum: ["S", "N", "B"]
+        type: enum
+        default: "S"
+      - name: RangeAttributeName
+        required: true
+        title: Range Attribute Name
+        description: 'The attribute name that is used as the sort key for this table. Sort key element names can be 1 – 255 characters long and have no character restrictions.'
+        type: string
+      - name: RangeAttributeType
+        required: true
+        title: Range Attribute Type
+        description: 'The data type for the attribute. You can specify S for string data, N for numeric data, or B for binary data.'
+        enum: ["S", "N", "B"]
+        type: enum
+        default: "S"
+      - name: ReadCapacityUnits
+        required: true
+        title: Read Capacity Units
+        description: 'Sets the desired minimum number of consistent reads of items (up to 1KB in size) per second for the specified table before Amazon DynamoDB balances the load.'
+        type: string
+        default: "5"
+      - name: WriteCapacityUnits
+        required: true
+        title: Write Capacity Units
+        description: 'Sets the desired minimum number of consistent writes of items (up to 1KB in size) per second for the specified table before Amazon DynamoDB balances the load.'
+        type: string
+        default: "5"
+      
+
+
+    metadata:
+        displayName: "Amazon dynamodb"
+        longDescription: "Amazon DynamoDB is a fully managed NoSQL database service that provides fast and predictable performance with seamless scalability. You can use Amazon DynamoDB to create a database table that can store and retrieve any amount of data, and serve any level of request traffic. Amazon DynamoDB automatically spreads the data and traffic for the table over a sufficient number of servers to handle the request capacity specified by the customer and the amount of data stored, while maintaining consistent and fast performance."
+        imageUrl: "https://s3.amazonaws.com/thp-aws-icons-dev/Database_AmazonDynamoDB_LARGE.png"
+        documentationUrl: https://aws.amazon.com/documentation/dynamodb/
+        cost: $0.00
