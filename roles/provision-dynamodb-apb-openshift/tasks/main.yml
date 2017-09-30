@@ -13,8 +13,8 @@
      HashAttributeType: "{{ HashAttributeType }}"
      RangeAttributeName: "{{ RangeAttributeName }}"
      RangeAttributeType: "{{ RangeAttributeType }}"
-     ReadCapacityUnits: "{{ ReadCapacityUnits }}"
-     WriteCapacityUnits: "{{ WriteCapacityUnits }}"
+     ReadCapacityUnits: "{{ ReadCapacityUnits | string }}"
+     WriteCapacityUnits: "{{ WriteCapacityUnits | string }}"
    tags:
      Stack: "ansible-cloudformation"
      Application: "ansible-dynamodb"
@@ -28,5 +28,6 @@
 - name: Encode bind credentials
   asb_encode_binding:
     fields:
-      table_name: "{{ dynamodb.stack_outputs.TableName }}"
+      DYNAMODB_TABLE_NAME: "{{ dynamodb.stack_outputs.TableName }}"
+      DYNAMODB_TABLE_REGION: "{{ region }}"
   when: dynamodb.log | length < 1
