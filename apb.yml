@@ -1,5 +1,5 @@
+version: 1.0
 name: dynamodb-apb
-image: ansibleplaybookbundle/dynamodb-apb
 description: 'DynamoDB Table'
 tags:
   - amazon
