@@ -1,0 +1,4 @@
+application_name: "{{ namespace }}::{{ _apb_plan_id }}"
+# build this from vars until we can get cluster_url and ServiceInstance UID
+param_string: "{{ namespace }}::{{ _apb_plan_id }}::{{ region }}::{{ RangeAttributeName }}::{{ RangeAttributeType }}::{{ ReadCapacityUnits }}::{{ WriteCapacityUnits }}::{{ HashAttributeName }}::{{ HashAttributeType }}"
+stack_suffix: "{{ param_string | checksum }}"
