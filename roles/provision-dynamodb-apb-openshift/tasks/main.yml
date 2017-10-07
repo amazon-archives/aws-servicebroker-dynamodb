@@ -1,33 +1,55 @@
 - name: Launch dynamodb
   cloudformation:
-   aws_access_key: "{{ aws_access_key }}"
-   aws_secret_key: "{{ aws_secret_key }}"
-   stack_name: "apb-dynamodb-{{ stack_identifier }}"
-   state: "present"
-   region: "{{ region }}"
-   disable_rollback: false
-   template: "{{ role_path }}/files/DynamoDB.yml"
-   template_parameters:
-     ApplicationName: "{{ ApplicationName }}"
-     HashAttributeName: "{{ HashAttributeName }}"
-     HashAttributeType: "{{ HashAttributeType }}"
-     RangeAttributeName: "{{ RangeAttributeName }}"
-     RangeAttributeType: "{{ RangeAttributeType }}"
-     ReadCapacityUnits: "{{ ReadCapacityUnits | string }}"
-     WriteCapacityUnits: "{{ WriteCapacityUnits | string }}"
-   tags:
-     Stack: "ansible-cloudformation"
-     Application: "ansible-dynamodb"
-     Description: "{{ ansible_user_id }} dynamodb {{ ApplicationName }}"
+    stack_name: "apb-dynamodb-{{ stack_suffix }}"
+    state: "present"
+    region: "{{ region }}"
+    disable_rollback: false
+    template: "{{ role_path }}/files/DynamoDB.yml"
+    role_arn: "{{ aws_cloudformation_role_arn }}"
+    template_parameters:
+      ApplicationName: "{{ application_name }}"
+      HashAttributeName: "{{ HashAttributeName }}"
+      HashAttributeType: "{{ HashAttributeType }}"
+      RangeAttributeName: "{{ RangeAttributeName }}"
+      RangeAttributeType: "{{ RangeAttributeType }}"
+      ReadCapacityUnits: "{{ ReadCapacityUnits | string }}"
+      WriteCapacityUnits: "{{ WriteCapacityUnits | string }}"
+    tags:
+      Stack: "ansible-cloudformation"
+      Application: "ansible-dynamodb"
+      Description: "{{ ansible_user_id }} dynamodb {{ application_name }}"
   register: dynamodb
-
 - name: Check for CloudFormation error logs
   debug:
     var: dynamodb.log
-
+  failed_when: dynamodb.log | length > 0
+- name: Create IAM user
+  iam:
+    iam_type: user
+    name: "apb-dynamodb-iam-{{ stack_suffix }}"
+    state: present
+    access_key_state: create
+  register: iam_output
+- name: Generate IAM policy temporary json file
+  template:
+    src: "{{ role_path }}/files/DynamoDBAccessPolicy.json.j2"
+    dest: "/tmp/{{ dynamodb.stack_outputs.TableArn | checksum }}.json"
+- name: Attach IAM policy
+  iam_policy:
+    iam_type: user
+    iam_name: "apb-dynamodb-iam-{{ stack_suffix }}"
+    policy_name: "DynamoDB-APB-{{ stack_suffix }}"
+    state: present
+    policy_document: "/tmp/{{ dynamodb.stack_outputs.TableArn | checksum }}.json"
+- name: Remove IAM policy temporary json file
+  file:
+    state: absent
+    path: /tmp/{{ dynamodb.stack_outputs.TableArn | checksum }}.json
 - name: Encode bind credentials
   asb_encode_binding:
     fields:
       DYNAMODB_TABLE_NAME: "{{ dynamodb.stack_outputs.TableName }}"
       DYNAMODB_TABLE_REGION: "{{ region }}"
-  when: dynamodb.log | length < 1
+      DYNAMODB_TABLE_ARN: "{{ dynamodb.stack_outputs.TableArn }}"
+      DYNAMODB_ACCESS_KEY_ID: "{{ iam_output.user_meta.access_keys[0].access_key_id }}"
+      DYNAMODB_SECRET_ACCESS_KEY: "{{ iam_output.user_meta.access_keys[0].secret_access_key }}"

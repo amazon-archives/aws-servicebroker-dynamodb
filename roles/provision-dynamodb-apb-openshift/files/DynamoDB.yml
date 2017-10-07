@@ -64,4 +64,6 @@ Outputs:
   TableName:
     Description: Name of the DynamoDB Table
     Value: !Ref DynamoDBTable
-   
+  TableArn:
+    Description: Arn of the DynamoDB Table
+    Value: !GetAtt DynamoDBTable.Arn
