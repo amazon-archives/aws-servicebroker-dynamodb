@@ -1,3 +1,12 @@
+- name: include plan vars
+  include_vars:
+    file: "{{ _apb_plan_id }}.yml"
+- name: generate b62 hash
+  shell: "16to62 {{ params_hash }}"
+  register: command_output
+- name: set fact
+  set_fact:
+    stack_suffix: "{{ command_output.stdout }}"
 - name: Launch dynamodb
   cloudformation:
     stack_name: "apb-dynamodb-{{ stack_suffix }}"
@@ -15,9 +24,7 @@
       ReadCapacityUnits: "{{ ReadCapacityUnits | string }}"
       WriteCapacityUnits: "{{ WriteCapacityUnits | string }}"
     tags:
-      Stack: "ansible-cloudformation"
-      Application: "ansible-dynamodb"
-      Description: "{{ ansible_user_id }} dynamodb {{ application_name }}"
+      ServiceBrokerId: "{{ application_name }}"
   register: dynamodb
 - name: Check for CloudFormation error logs
   debug:
