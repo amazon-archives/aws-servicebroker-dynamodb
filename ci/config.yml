@@ -12,4 +12,4 @@ plans:
       RangeAttributeType: S
       ReadCapacityUnits: 5
       WriteCapacityUnits: 5
-    sample_app: sns-sample-app-apb
+    sample_app: dynamodb-sample-app-apb
