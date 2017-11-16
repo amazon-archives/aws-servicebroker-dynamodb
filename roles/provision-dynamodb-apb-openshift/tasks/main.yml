@@ -58,12 +58,12 @@
 - name: Encode bind credentials
   asb_encode_binding:
     fields:
-      DYNAMODB_TABLE_NAME: "{{ dynamodb.stack_outputs.TableName }}"
-      DYNAMODB_TABLE_REGION: "{{ region }}"
-      DYNAMODB_TABLE_ARN: "{{ dynamodb.stack_outputs.TableArn }}"
-      DYNAMODB_ACCESS_KEY_ID: "{{ iam_output.user_meta.access_keys[0].access_key_id }}"
-      DYNAMODB_SECRET_ACCESS_KEY: "{{ iam_output.user_meta.access_keys[0].secret_access_key }}"
-      DYNAMODB_HASH_NAME: "{{ HashAttributeName }}"
-      DYNAMODB_HASH_TYPE: "{{ HashAttributeType }}"
-      DYNAMODB_RANGE_NAME: "{{ RangeAttributeName }}"
-      DYNAMODB_RANGE_TYPE: "{{ RangeAttributeType }}"
+      DYNAMODB_TABLE_NAME:           "{{ dynamodb.stack_outputs.TableName }}"
+      DYNAMODB_REGION:               "{{ region }}"
+      DYNAMODB_TABLE_ARN:            "{{ dynamodb.stack_outputs.TableArn }}"
+      DYNAMODB_ACCESS_KEY_ID:        "{{ iam_output.user_meta.access_keys[0].access_key_id }}"
+      DYNAMODB_SECRET_ACCESS_KEY:    "{{ iam_output.user_meta.access_keys[0].secret_access_key }}"
+      DYNAMODB_HASH_ATTRIBUTE_NAME:  "{{ HashAttributeName }}"
+      DYNAMODB_HASH_ATTRIBUTE_TYPE:  "{{ HashAttributeType }}"
+      DYNAMODB_RANGE_ATTRIBUTE_NAME: "{{ RangeAttributeName }}"
+      DYNAMODB_RANGE_ATTRIBUTE_TYPE: "{{ RangeAttributeType }}"
