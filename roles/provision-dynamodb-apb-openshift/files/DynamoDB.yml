@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: ' Template for Production DynamoDB Table'
+Description: 'Template for Production DynamoDB Table. qs-1nt0fs927'
 Parameters:
   ApplicationName:
     Description: >-
