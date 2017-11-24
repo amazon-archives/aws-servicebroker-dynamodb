@@ -1,23 +1,26 @@
-# Dynamodb-APB
+# Amazon DynamoDB for the AWS Service Broker
+Provision, manage and connect to [Amazon DynamoDB](https://aws.amazon.com/dynamodb/).
 
-## DynamoDB Servivce Broker
-### Plans:
-dynamodb-hashrange
+## Prerequisites
 
-### Prerequisites:
-#### IAM resources: 
-#### These need to already exist within the AWS account the service broker resources are going to be created in. 
-OpenShift will need to authenticate to an AWS account and have the required permissions to create and manage resources.
-In order to authenticate to the AWS account an IAM user information will be required. 
-http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html
+**IAM resources** - see the [AWS Service Broker Requirements](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/Overview.md#requirements) for details
 
-AWS CloudFormation will make use of a IAM service role used to launch the required resources.
-This role must have the required permissions to launch the expected resouces, the role needs to be able to be assumed by the CloudFormation service.
-http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-servicerole.html
+## Plans
 
-### Use case expectations:
+### dynamodb-hashrange
+Creates a DynamoDB table with a hash key and a range key
 
-### Retained resources:
-Resources retained within the AWS account should this plan be removed.
+## Retained resources
 
-* No resources are detained for this broker.
+The DynamoDB table, data and all associated resources will be fully removed if the Service Instance is deleted.
+
+## Resources
+
+[Getting Started With OCP and the AWS Service Broker](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/getting-started.md)  
+[AWS Service Broker Overview](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/Overview.md)  
+[FAQ](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/FAQ.md)  
+[Troubleshooting](https://github.com/awslabs/aws-servicebroker-documentation/blob/master/Troubleshooting.md)  
+
+## License
+
+This library is licensed under the Apache 2.0 License.
